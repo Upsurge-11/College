@@ -5,12 +5,30 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <ctype.h>
 
-int fibonacci(int n)
+int longWordLength(char *s)
 {
-  if (n <= 1)
-    return n;
-  return fib(n - 1) + fib(n - 2);
+  int i, count, max;
+  max = 0;
+  count = 0;
+  while (*(s) != '\0')
+  {
+    if (!isspace(*s) && !ispunct(*s))
+    {
+      count++;
+      if (count > max)
+      {
+        max = count;
+      }
+    }
+    else
+    {
+      count = 0;
+    }
+    s++;
+  }
+  return max;
 }
 
 int main(int argc, char **argv)
@@ -26,7 +44,7 @@ int main(int argc, char **argv)
 
   int sockfd;
   struct sockaddr_in serveraddr, clientaddr;
-  int fibo;
+  char buffer[1024];
   socklen_t addrsize;
   int n;
 
@@ -59,12 +77,14 @@ int main(int argc, char **argv)
     printf("[+] bind success\n");
   }
 
+  bzero(buffer, sizeof(buffer));
   addrsize = sizeof(clientaddr);
-  recvfrom(sockfd, &fibo, sizeof(fibo), 0, (struct sockaddr *)&clientaddr, &addrsize);
-  printf("[+] Data received: %d\n", fibo);
+  recvfrom(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *)&clientaddr, &addrsize);
+  printf("[+] Data received: %s\n", buffer);
+  int max = longWordLength(buffer);
 
-  int ans = fibonacci(fibo);
-  printf("Fibonacci of %d is %d\n", fibo, ans);
+  sendto(sockfd, &max, sizeof(max), 0, (struct sockaddr *)&clientaddr, sizeof(clientaddr));
+  printf("[+] Data sent: %d\n", max);
 
   return 0;
 }

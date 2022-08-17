@@ -6,13 +6,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-int fibonacci(int n)
-{
-  if (n <= 1)
-    return n;
-  return fib(n - 1) + fib(n - 2);
-}
-
 int main(int argc, char **argv)
 {
   if (argc != 2)
@@ -26,7 +19,8 @@ int main(int argc, char **argv)
 
   int sockfd;
   struct sockaddr_in serveraddr, clientaddr;
-  int fibo;
+  char id[1024];
+  char pswd[1024];
   socklen_t addrsize;
   int n;
 
@@ -59,12 +53,31 @@ int main(int argc, char **argv)
     printf("[+] bind success\n");
   }
 
-  addrsize = sizeof(clientaddr);
-  recvfrom(sockfd, &fibo, sizeof(fibo), 0, (struct sockaddr *)&clientaddr, &addrsize);
-  printf("[+] Data received: %d\n", fibo);
+  char idStored[1024];
+  char pswdStored[1024];
+  printf("Enter the ID :-\n");
+  fgets(idStored, 1024, stdin);
+  printf("Enter the pswd:-\n");
+  fgets(pswdStored, 1024, stdin);
 
-  int ans = fibonacci(fibo);
-  printf("Fibonacci of %d is %d\n", fibo, ans);
+  bzero(id, sizeof(id));
+  addrsize = sizeof(clientaddr);
+  recvfrom(sockfd, id, sizeof(id), 0, (struct sockaddr *)&clientaddr, &addrsize);
+  printf("[+] Data received: %s\n", id);
+
+  bzero(pswd, sizeof(pswd));
+  addrsize = sizeof(clientaddr);
+  recvfrom(sockfd, pswd, sizeof(pswd), 0, (struct sockaddr *)&clientaddr, &addrsize);
+  printf("[+] Data received: %s\n", pswd);
+
+  if (strcmp(id, idStored) == 0 && strcmp(pswd, pswdStored) == 0)
+  {
+    printf("[+] Login Successful\n");
+  }
+  else
+  {
+    printf("[-] Login Failed\n");
+  }
 
   return 0;
 }

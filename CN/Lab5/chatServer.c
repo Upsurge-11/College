@@ -6,13 +6,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-int fibonacci(int n)
-{
-  if (n <= 1)
-    return n;
-  return fib(n - 1) + fib(n - 2);
-}
-
 int main(int argc, char **argv)
 {
   if (argc != 2)
@@ -26,7 +19,7 @@ int main(int argc, char **argv)
 
   int sockfd;
   struct sockaddr_in serveraddr, clientaddr;
-  int fibo;
+  char buffer[1024];
   socklen_t addrsize;
   int n;
 
@@ -59,12 +52,28 @@ int main(int argc, char **argv)
     printf("[+] bind success\n");
   }
 
-  addrsize = sizeof(clientaddr);
-  recvfrom(sockfd, &fibo, sizeof(fibo), 0, (struct sockaddr *)&clientaddr, &addrsize);
-  printf("[+] Data received: %d\n", fibo);
+  while (1)
+  {
+    bzero(buffer, sizeof(buffer));
+    addrsize = sizeof(clientaddr);
+    recvfrom(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *)&clientaddr, &addrsize);
+    printf("[+] Client:- %s\n", buffer);
 
-  int ans = fibonacci(fibo);
-  printf("Fibonacci of %d is %d\n", fibo, ans);
+    if (strcmp(buffer, "bye\n") == 0)
+    {
+      break;
+    }
+
+    bzero(buffer, sizeof(buffer));
+    printf("[+] Send chat :-");
+    fgets(buffer, 1024, stdin);
+    sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *)&clientaddr, sizeof(clientaddr));
+
+    if (strcmp(buffer, "bye\n") == 0)
+    {
+      break;
+    }
+  }
 
   return 0;
 }
