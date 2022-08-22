@@ -1,31 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
-void guessANumber(int n)
+int guessANumber(int n, int start, int end)
 {
-  int guess;
+  printf("The number is between %d and %d.\n", start, end);
+  int guess, count = 0;
   while (1)
   {
-    scanf("%d", &guess);
+    guess = (start + end) / 2;
+    count++;
     if (guess == n)
     {
-      printf("You guessed it!\n");
+      printf("You Guessed the number :- %d.\n", guess);
       break;
     }
     else if (guess > n)
     {
-      printf("Too high!\n");
+      printf("%d is bigger than the number!\n", guess);
+      end = guess;
     }
     else
     {
-      printf("Too low!\n");
+      printf("%d is smaller than the number!\n", guess);
+      start = guess;
     }
   }
+  return count;
 }
 
 int main()
 {
-  int n = rand() % 100;
-  guessANumber(n);
+  srand(time(NULL));
+  int n = (rand() % 100) + 1;
+  int numberOfTries = guessANumber(n, 0, 99);
+  printf("The number was found in %d tries.\n", numberOfTries);
+
   return 0;
 }

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 void quicksort(int number[], int first, int last)
 {
@@ -30,6 +31,11 @@ void quicksort(int number[], int first, int last)
   }
 }
 
+float timeComplexity(clock_t start, clock_t end)
+{
+  return (float)(((float)(end - start)) / CLOCKS_PER_SEC);
+}
+
 int binarySearch(int arr[], int l, int r, int x)
 {
   if (r >= l)
@@ -46,6 +52,8 @@ int binarySearch(int arr[], int l, int r, int x)
 
 int main()
 {
+  srand(time(NULL));
+  printf("Enter the size of the array :- ");
   int n;
   scanf("%d", &n);
   int a[n];
@@ -59,8 +67,14 @@ int main()
     printf("%d ", a[i]);
   }
   printf("\n");
+  printf("Enter the element you want to search :-");
   int x;
   scanf("%d", &x);
-  printf("%d\n", binarySearch(a, 0, n - 1, x));
+  clock_t start = clock();
+  int ans = binarySearch(a, 0, n - 1, x);
+  clock_t end = clock();
+  printf("%d\n", ans);
+  printf("%lf\n", timeComplexity(start, end));
+
   return 0;
 }

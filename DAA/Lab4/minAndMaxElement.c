@@ -1,5 +1,11 @@
 #include <stdio.h>
 #include <limits.h>
+#include <time.h>
+
+double timeComplexity(clock_t start, clock_t end)
+{
+  return (double)(((double)(end - start)) / CLOCKS_PER_SEC);
+}
 
 void findMinAndMax(int nums[], int low, int high, int *min, int *max)
 {
@@ -78,7 +84,16 @@ int main()
     scanf("%d", &a[i]);
   }
   int min = INT_MAX, max = INT_MIN;
+  clock_t start = clock();
   findMinAndMax(a, 0, n - 1, &min, &max);
+  clock_t end = clock();
   printf("%d %d\n", min, max);
+  printf("Time complexity for finding the element in optimised way : %lf\n", timeComplexity(start, end));
+  min = INT_MAX, max = INT_MIN;
+  start = clock();
+  findMinAndMaxBrute(a, n);
+  end = clock();
+  printf("Time complexity for finding the element in brute force way : %lf\n", timeComplexity(start, end));
+
   return 0;
 }
