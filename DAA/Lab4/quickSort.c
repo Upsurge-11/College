@@ -54,7 +54,9 @@ int main()
     scanf("%d", &a[i]);
   }
   int partition = 0, comparison = 0;
+  clock_t start = clock();
   quicksort(a, 0, n - 1, &partition, &comparison);
+  clock_t end = clock();
   printf("Sorted array is :- ");
   for (int i = 0; i < n; i++)
   {
@@ -63,6 +65,7 @@ int main()
 
   printf("\nNumber Of Partitions :- %d\n", partition);
   printf("Number Of Comparisons :- %d\n", comparison);
+  printf("The time complexity of sorting this array is %lf.\n", timeComplexity(start, end));
 
   return 0;
 }

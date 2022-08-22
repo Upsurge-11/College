@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-void printCommon(int boys[], int b, int girls[], int g)
+void printCommonAge(int boys[], int b, int girls[], int g)
 {
   int i = 0, j = 0;
   while (b > i && g > j)

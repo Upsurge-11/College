@@ -31,9 +31,9 @@ void quicksort(int number[], int first, int last)
   }
 }
 
-float timeComplexity(clock_t start, clock_t end)
+double timeComplexity(clock_t start, clock_t end)
 {
-  return (float)(((float)(end - start)) / CLOCKS_PER_SEC);
+  return (double)(((double)(end - start)) / CLOCKS_PER_SEC);
 }
 
 int binarySearch(int arr[], int l, int r, int x)
