@@ -18,7 +18,7 @@ void insertionSort(int arr[], int n)
   }
 }
 
-void printArray(int arr[], int n)
+void displayArray(int arr[], int n)
 {
   int i;
   for (i = 0; i < n; i++)
@@ -32,7 +32,7 @@ int main()
   int n = sizeof(arr) / sizeof(arr[0]);
 
   insertionSort(arr, n);
-  printArray(arr, n);
+  displayArray(arr, n);
 
   return 0;
 }

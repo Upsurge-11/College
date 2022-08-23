@@ -1,10 +1,13 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <limits.h>
 #include <time.h>
 
-double timeComplexity(clock_t start, clock_t end)
+int randInt()
 {
-  return (double)(((double)(end - start)) / CLOCKS_PER_SEC);
+  __time_t t;
+  srand((unsigned)t * rand());
+  return rand() % 1000;
 }
 
 void findMinAndMax(int nums[], int low, int high, int *min, int *max)
@@ -71,29 +74,38 @@ void findMinAndMaxBrute(int nums[], int n)
       max = nums[i];
     }
   }
-  printf("%d %d\n", min, max);
+}
+
+void analyse(int n)
+{
+  int *arr = malloc(n * sizeof(int));
+  for (int i = 0; i < n; i++)
+  {
+    int num = randInt();
+    arr[i] = num;
+  }
+  int mx = INT_MIN, mn = INT_MAX, i;
+  clock_t t;
+  double rt, bt;
+  t = clock();
+  findMinAndMaxBrute(arr, n);
+  t = clock() - t;
+  bt = ((double)t) / CLOCKS_PER_SEC;
+  t = clock();
+  findMinAndMax(arr, 0, n - 1, &mn, &mx);
+  t = clock() - t;
+  rt = ((double)t) / CLOCKS_PER_SEC;
+  printf("%d\t%5d\t%10f\t%10f", n / 500, n, rt, bt);
 }
 
 int main()
 {
-  int n;
-  scanf("%d", &n);
-  int a[n];
-  for (int i = 0; i < n; i++)
+  printf("S.No.\tVal N\t Using DnC\t Using Brute Force\n");
+  for (int i = 500; i <= 5000; i += 500)
   {
-    scanf("%d", &a[i]);
+    analyse(i);
+    printf("\n");
   }
-  int min = INT_MAX, max = INT_MIN;
-  clock_t start = clock();
-  findMinAndMax(a, 0, n - 1, &min, &max);
-  clock_t end = clock();
-  printf("%d %d\n", min, max);
-  printf("Time complexity for finding the element in optimised way : %lf\n", timeComplexity(start, end));
-  min = INT_MAX, max = INT_MIN;
-  start = clock();
-  findMinAndMaxBrute(a, n);
-  end = clock();
-  printf("Time complexity for finding the element in brute force way : %lf\n", timeComplexity(start, end));
 
   return 0;
 }
