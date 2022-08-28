@@ -7,7 +7,7 @@ void swap(int *a, int *b)
   *b = temp;
 }
 
-void merge(int arr[], int l, int m, int r)
+void merge(int arr[], int l, int m, int r, int *comparison)
 {
   int i, j, k;
   int n1 = m - l + 1;
@@ -28,11 +28,13 @@ void merge(int arr[], int l, int m, int r)
     if (L[i] <= R[j])
     {
       arr[k] = L[i];
+      (*comparison)++;
       i++;
     }
     else
     {
       arr[k] = R[j];
+      (*comparison)++;
       j++;
     }
     k++;
@@ -53,20 +55,20 @@ void merge(int arr[], int l, int m, int r)
   }
 }
 
-void mergeSort(int arr[], int l, int r)
+void newSortUtil(int arr[], int l, int r, int *comparison)
 {
   if (l < r)
   {
     int m = l + (r - l) / 2;
 
-    mergeSort(arr, l, m);
-    mergeSort(arr, m + 1, r);
+    newSortUtil(arr, l, m, comparison);
+    newSortUtil(arr, m + 1, r, comparison);
 
-    merge(arr, l, m, r);
+    merge(arr, l, m, r, comparison);
   }
 }
 
-void newSort(int a[], int n)
+void newSort(int a[], int n, int *comparison)
 {
   if (n == 1)
     return;
@@ -74,22 +76,23 @@ void newSort(int a[], int n)
   {
     if (a[0] > a[1])
     {
+      (*comparison)++;
       swap(&a[0], &a[1]);
     }
   }
   else
   {
     int m = (2 * n) / 3;
-    mergeSort(a, 0, m);
+    newSortUtil(a, 0, m, comparison);
     int o = n / 3;
-    mergeSort(a, o, n - 1);
-    mergeSort(a, 0, m);
+    newSortUtil(a, 0, m, comparison);
+    newSortUtil(a, o, n - 1, comparison);
   }
 }
 
 int main()
 {
-  int n;
+  int n, comparison = 0;
   printf("Enter the size of the array :- ");
   scanf("%d", &n);
   int a[n];
@@ -98,11 +101,12 @@ int main()
   {
     scanf("%d", &a[i]);
   }
-  newSort(a, n);
+  newSort(a, n, &comparison);
   printf("The sorted array is :- ");
   for (int i = 0; i < n; i++)
   {
     printf("%d ", a[i]);
   }
+  printf("\nThe number of comparisons is :- %d\n", comparison);
   return 0;
 }
