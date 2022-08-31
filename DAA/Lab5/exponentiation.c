@@ -8,7 +8,7 @@ unsigned long long int divideAndConquerExponentiation(int a, int n, int *countDi
   if (n == 0)
     return 1;
   int number = divideAndConquerExponentiation(a, n / 2, countDivideNConquer);
-  if (n & 1)
+  if (n % 2 != 0)
     return number * a * number;
   else
     return number * number;
