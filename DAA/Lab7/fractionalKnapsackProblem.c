@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-void main()
+int main()
 {
   int capacity, no_items, cur_weight, item;
   int used[10];
@@ -9,18 +9,18 @@ void main()
   int weight[10];
   int value[10];
 
-  printf("Enter the capacity of knapsack:\n");
+  printf("Enter the capacity of knapsack :- ");
   scanf("%d", &capacity);
 
-  printf("Enter the number of items:\n");
+  printf("Enter the number of items :- ");
   scanf("%d", &no_items);
 
-  printf("Enter the weight and value of %d item:\n", no_items);
+  printf("Enter the weight and value of %d item :- \n", no_items);
   for (i = 0; i < no_items; i++)
   {
-    printf("Weight[%d]:\t", i);
+    printf("Weight[%d] :- ", i);
     scanf("%d", &weight[i]);
-    printf("Value[%d]:\t", i);
+    printf("Value[%d] :- ", i);
     scanf("%d", &value[i]);
   }
 
@@ -51,4 +51,6 @@ void main()
   }
 
   printf("Filled the bag with objects worth %.2f Rs.\n", total_profit);
+
+  return 0;
 }
