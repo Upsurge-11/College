@@ -3,14 +3,14 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-void swap(int *xp, int *yp)
+void swapMax(int *xp, int *yp)
 {
   int temp = *xp;
   *xp = *yp;
   *yp = temp;
 }
 
-void MaxHeapify(int arr[], int i, int n)
+void maxHeapify(int arr[], int i, int n)
 {
   int l = 2 * i + 1;
   int r = 2 * i + 2;
@@ -22,38 +22,66 @@ void MaxHeapify(int arr[], int i, int n)
     largest = r;
   if (largest != i)
   {
-    swap(&arr[i], &arr[largest]);
-    MaxHeapify(arr, largest, n);
-  }
-}
-
-void MinHeapify(int arr[], int i, int n)
-{
-  int l = 2 * i + 1;
-  int r = 2 * i + 2;
-  int smallest = i;
-
-  if (l < n && arr[l] < arr[i])
-    smallest = l;
-  if (r < n && arr[r] < arr[smallest])
-    smallest = r;
-  if (smallest != i)
-  {
-    swap(&arr[i], &arr[smallest]);
-    MinHeapify(arr, i, n);
+    swapMax(&arr[i], &arr[largest]);
+    maxHeapify(arr, largest, n);
   }
 }
 
 void convertMaxHeap(int arr[], int n)
 {
   for (int i = (n - 2) / 2; i >= 0; i--)
-    MaxHeapify(arr, i, n);
+    maxHeapify(arr, i, n);
 }
 
-void convertMinHeap(int arr[], int n)
+void swapMin(int arr[], int first, int second)
 {
-  for (int i = (n - 2) / 2; i >= 0; i--)
-    MinHeapify(arr, i, n);
+  int auxiliary = arr[first];
+  arr[first] = arr[second];
+  arr[second] = auxiliary;
+}
+
+int compare(int arr[], int left, int right, int root, int size)
+{
+  int location = -1;
+  if ((left < size && arr[left] < arr[root]))
+  {
+    if ((right < size && arr[right] < arr[left]))
+    {
+      swapMin(arr, right, root);
+      location = right;
+    }
+    else
+    {
+      swapMin(arr, left, root);
+      location = left;
+    }
+  }
+  else if ((right < size && arr[right] < arr[root]))
+  {
+    swapMin(arr, right, root);
+    location = right;
+  }
+  return location;
+}
+
+void minHeapify(int arr[], int size, int root)
+{
+  int left = 2 * root + 1;
+  int right = 2 * root + 2;
+  int step = compare(arr, left, right, root, size);
+  if ((step != -1))
+  {
+    minHeapify(arr, size, step);
+  }
+}
+void convertMinHeap(int arr[], int size)
+{
+  int i = (size / 2) - 1;
+  while (i >= 0)
+  {
+    minHeapify(arr, size, i);
+    i--;
+  }
 }
 
 bool isMinHeap(int arr[], int n)

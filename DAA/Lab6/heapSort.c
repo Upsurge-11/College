@@ -230,7 +230,6 @@ int main()
       int num;
       printf("Enter number to be inserted\n");
       scanf("%d", &num);
-      printf(";-;\n");
       arr[n + 1] = num;
       buildHeap(arr, n + 1);
       printArr(arr, n + 1);
