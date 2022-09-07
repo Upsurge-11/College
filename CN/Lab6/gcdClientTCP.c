@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 
   int clientSocket;
   struct sockaddr_in serverAddr;
-  char buffer[1024] = {0};
+  int a, b, ans;
 
   clientSocket = socket(PF_INET, SOCK_STREAM, 0);
   printf("[+]Client Socket Created Sucessfully.\n");
@@ -31,8 +31,14 @@ int main(int argc, char **argv)
   connect(clientSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr));
   printf("[+]Connected to Server.\n");
 
-  recv(clientSocket, buffer, 1024, 0);
-  printf("[+]Data Recv: %s\n", buffer);
+  printf("Enter two numbers:- ");
+  scanf("%d %d", &a, &b);
+  send(clientSocket, &a, sizeof(a), 0);
+  printf("[+]Data Recv: %d\n", a);
+  send(clientSocket, &b, sizeof(b), 0);
+  printf("[+]Data Recv: %d\n", b);
+  recv(clientSocket, &ans, sizeof(ans), 0);
+  printf("[+] GCD of %d and %d is %d.\n", a, b, ans);
   printf("[+]Closing the connection.\n");
 
   return 0;

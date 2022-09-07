@@ -24,7 +24,7 @@ int main(int argc, char **argv)
   struct sockaddr_in newAddr;
 
   socklen_t addr_size;
-  char buffer[1024] = {0};
+  int a, b, ans;
 
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
   printf("[+]Server Socket Created Sucessfully.\n");
@@ -42,8 +42,12 @@ int main(int argc, char **argv)
 
   newSocket = accept(sockfd, (struct sockaddr *)&newAddr, &addr_size);
 
-  strcpy(buffer, "Hello");
-  send(newSocket, buffer, strlen(buffer), 0);
+  printf("Enter the two numbers:- ");
+  scanf("%d %d", &a, &b);
+  send(newSocket, &a, sizeof(a), 0);
+  send(newSocket, &b, sizeof(b), 0);
+  recv(newSocket, &ans, sizeof(a), 0);
+  printf("Sum of the two numbers is %d.\n", ans);
   printf("[+]Closing the connection.\n");
   close(newSocket);
   shutdown(sockfd, SHUT_RDWR);

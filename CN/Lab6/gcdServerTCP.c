@@ -7,6 +7,28 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+int gcd(int a, int b)
+{
+  int result;
+  if (a > b)
+  {
+    result = b;
+  }
+  else
+  {
+    result = a;
+  }
+  while (result > 0)
+  {
+    if (a % result == 0 && b % result == 0)
+    {
+      break;
+    }
+    result--;
+  }
+  return result;
+}
+
 int main(int argc, char **argv)
 {
   if (argc != 2)
@@ -24,7 +46,7 @@ int main(int argc, char **argv)
   struct sockaddr_in newAddr;
 
   socklen_t addr_size;
-  char buffer[1024] = {0};
+  int a, b, ans;
 
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
   printf("[+]Server Socket Created Sucessfully.\n");
@@ -42,8 +64,13 @@ int main(int argc, char **argv)
 
   newSocket = accept(sockfd, (struct sockaddr *)&newAddr, &addr_size);
 
-  strcpy(buffer, "Hello");
-  send(newSocket, buffer, strlen(buffer), 0);
+  recv(newSocket, &a, sizeof(a), 0);
+  printf("[+]Received first number: %d.\n", a);
+  recv(newSocket, &b, sizeof(b), 0);
+  printf("[+]Received second number: %d.\n", b);
+  ans = gcd(a, b);
+  send(newSocket, &ans, sizeof(ans), 0);
+  printf("[+]Sent GCD: %d.\n", ans);
   printf("[+]Closing the connection.\n");
   close(newSocket);
   shutdown(sockfd, SHUT_RDWR);
