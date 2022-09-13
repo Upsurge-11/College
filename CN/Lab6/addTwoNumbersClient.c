@@ -31,13 +31,15 @@ int main(int argc, char **argv)
   connect(clientSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr));
   printf("[+]Connected to Server.\n");
 
-  recv(clientSocket, &a, sizeof(a), 0);
-  printf("[+]Data Recv: %d\n", a);
-  recv(clientSocket, &b, sizeof(b), 0);
-  printf("[+]Data Recv: %d\n", b);
-  ans = a + b;
-  send(clientSocket, &ans, sizeof(ans), 0);
-  printf("[+] Data sent: %d\n", ans);
+  printf("Enter the two numbers:- ");
+  scanf("%d %d", &a, &b);
+
+  send(clientSocket, &a, sizeof(a), 0);
+  printf("[+]Data Sent: %d\n", a);
+  send(clientSocket, &b, sizeof(b), 0);
+  printf("[+]Data Sent: %d\n", b);
+  recv(clientSocket, &ans, sizeof(ans), 0);
+  printf("[+] Data recieved: %d\n", ans);
   printf("[+]Closing the connection.\n");
 
   return 0;

@@ -34,9 +34,9 @@ int main(int argc, char **argv)
   printf("Enter two numbers:- ");
   scanf("%d %d", &a, &b);
   send(clientSocket, &a, sizeof(a), 0);
-  printf("[+]Data Recv: %d\n", a);
+  printf("[+]Data Sent: %d\n", a);
   send(clientSocket, &b, sizeof(b), 0);
-  printf("[+]Data Recv: %d\n", b);
+  printf("[+]Data Sent: %d\n", b);
   recv(clientSocket, &ans, sizeof(ans), 0);
   printf("[+] GCD of %d and %d is %d.\n", a, b, ans);
   printf("[+]Closing the connection.\n");

@@ -42,12 +42,11 @@ int main(int argc, char **argv)
 
   newSocket = accept(sockfd, (struct sockaddr *)&newAddr, &addr_size);
 
-  printf("Enter the two numbers:- ");
-  scanf("%d %d", &a, &b);
-  send(newSocket, &a, sizeof(a), 0);
-  send(newSocket, &b, sizeof(b), 0);
-  recv(newSocket, &ans, sizeof(a), 0);
-  printf("Sum of the two numbers is %d.\n", ans);
+  recv(newSocket, &a, sizeof(a), 0);
+  recv(newSocket, &b, sizeof(b), 0);
+  ans = a + b;
+  send(newSocket, &ans, sizeof(ans), 0);
+  printf("[+]Data sent: %d\n", ans);
   printf("[+]Closing the connection.\n");
   close(newSocket);
   shutdown(sockfd, SHUT_RDWR);
