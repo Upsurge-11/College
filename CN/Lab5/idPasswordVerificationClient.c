@@ -50,7 +50,7 @@ int main(int argc, char **argv)
   printf("Enter the pswd :-");
   fgets(pswd, 1024, stdin);
   sendto(sockfd, pswd, sizeof(pswd), 0, (struct sockaddr *)&addr, sizeof(addr));
-  printf("[+] ID Sent: %s\n", pswd);
+  printf("[+] Pswd Sent: %s\n", pswd);
 
   return 0;
 }
