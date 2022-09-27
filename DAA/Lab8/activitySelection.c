@@ -24,7 +24,7 @@ int main()
   printf("Enter the number of activities :- ");
   scanf("%d", &n);
   int start[n], finish[n];
-  printf("Enter sorted array according to the finish time :- ");
+  printf("Enter sorted array according to the finish time :- \n");
   for (int i = 0; i < n; i++)
   {
     printf("Enter the start time of activity %d :- ", i);
