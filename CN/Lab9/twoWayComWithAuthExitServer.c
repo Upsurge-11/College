@@ -81,6 +81,8 @@ int main(int argc, char **argv)
         else
         {
           printf("Client: %s\n", buffer);
+          bzero(buffer, sizeof(buffer));
+          strcpy(buffer, "Hello Client. I have received your message.");
           send(newSocket, buffer, strlen(buffer), 0);
           bzero(buffer, sizeof(buffer));
         }
