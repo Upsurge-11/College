@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -13,45 +14,54 @@ int main(int argc, char **argv)
     printf("Usage: client <port>\n");
     exit(0);
   }
-
   int port = atoi(argv[1]);
-
-  int clientSocket, flag = 1;
+  int clientSocket, ret;
   struct sockaddr_in serverAddr;
-  char buffer[1024] = {0};
+  char buffer[1024];
 
-  clientSocket = socket(PF_INET, SOCK_STREAM, 0);
-  printf("[+]Client Socket Created Sucessfully.\n");
+  clientSocket = socket(AF_INET, SOCK_STREAM, 0);
+  if (clientSocket < 0)
+  {
+    printf("[-]Error in connection.\n");
+    exit(1);
+  }
+  printf("[+]Client Socket is created.\n");
 
   memset(&serverAddr, '\0', sizeof(serverAddr));
   serverAddr.sin_family = AF_INET;
   serverAddr.sin_port = htons(port);
-  inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
+  serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-  connect(clientSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr));
+  ret = connect(clientSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr));
+  if (ret < 0)
+  {
+    printf("[-]Error in connection.\n");
+    exit(1);
+  }
   printf("[+]Connected to Server.\n");
 
-  while (flag)
+  while (1)
   {
-    printf("Enter the message :- ");
-    fgets(buffer, 1024, stdin);
-    if (strcmp(buffer, "exit\n") == 0)
+    printf("Client:- ");
+    scanf("%s", &buffer[0]);
+    send(clientSocket, buffer, strlen(buffer), 0);
+
+    if (strcmp(buffer, ":exit") == 0)
     {
-      printf("[+]Closing the connection.\n");
-      flag = 0;
+      close(clientSocket);
+      printf("[-]Disconnected from server.\n");
+      exit(1);
     }
-    send(clientSocket, buffer, sizeof(buffer), 0);
-    printf("[+] Message Sent: %s\n", buffer);
-    bzero(buffer, sizeof(buffer));
-    if (flag)
+
+    if (recv(clientSocket, buffer, 1024, 0) < 0)
     {
-      recv(clientSocket, buffer, sizeof(buffer), 0);
-      printf("[+] Message Received: %s\n", buffer);
-      bzero(buffer, sizeof(buffer));
+      printf("[-]Error in receiving data.\n");
+    }
+    else
+    {
+      printf("Server:- %s\n", buffer);
     }
   }
-
-  printf("[+]Closing the connection.\n");
 
   return 0;
 }
